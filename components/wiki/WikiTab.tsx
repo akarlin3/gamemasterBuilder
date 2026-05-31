@@ -278,6 +278,10 @@ export default function WikiTab() {
             setSelected(e);
           }}
           onEdgeClick={(rel, pos) => setEdgeEditor({ rel, x: pos.x, y: pos.y })}
+          onEdgeDelete={(relId) => {
+            setEdgeEditor((cur) => (cur && cur.rel.id === relId ? null : cur));
+            wiki.removeRelationship(relId);
+          }}
         />
         <aside className="rounded-lg border border-rule bg-parchment p-3 shadow-card">
           {selected ? (

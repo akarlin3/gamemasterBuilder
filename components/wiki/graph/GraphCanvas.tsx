@@ -53,6 +53,8 @@ export type GraphCanvasProps = {
   onPositionsChange?: (positions: Record<string, { x: number; y: number }>) => void;
   /** A node was dragged onto another — propose an edge between them. */
   onConnectNodes?: (sourceKey: string, targetKey: string) => void;
+  /** GM-only: an edge was deleted from the canvas (React Flow remove / Delete key). */
+  onEdgeDelete?: (edgeId: string) => void;
 };
 
 function GraphCanvasInner({
@@ -68,6 +70,7 @@ function GraphCanvasInner({
   savedPositions,
   onPositionsChange,
   onConnectNodes,
+  onEdgeDelete,
 }: GraphCanvasProps) {
   const { fitView } = useReactFlow();
 
@@ -194,6 +197,12 @@ function GraphCanvasInner({
           if (interactive && c.source && c.target && c.source !== c.target) {
             onConnectNodes?.(c.source, c.target);
           }
+        }}
+        edgesFocusable={interactive}
+        deleteKeyCode={interactive ? ['Backspace', 'Delete'] : null}
+        onEdgesDelete={(removed) => {
+          if (!interactive) return;
+          for (const e of removed) onEdgeDelete?.(e.id);
         }}
         onNodeClick={(_, node) => {
           const n = nodes.find((x) => x.key === node.id);
