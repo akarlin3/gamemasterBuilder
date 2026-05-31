@@ -14,7 +14,9 @@ import { test, expect } from '@playwright/test';
 // design (see playwright.config.ts), only exercises the unauthenticated
 // surface. Wiring real auth + a `seedCampaign` helper (Firebase Auth emulator)
 // is the follow-up that lets this run. The deterministic engine that backs
-// every assertion below is fully covered by lib/world/__tests__/tick.test.ts.
+// every assertion below is fully covered by lib/world/__tests__/tick.test.ts;
+// the end-to-end pipeline (rule -> applyTicks -> briefing -> undo + free-tier
+// briefing surface) is covered by components/__tests__/livingWorldPipeline.test.tsx.
 test.describe.skip('Living World Tick happy path (needs auth + seed helpers)', () => {
   test('rule fires 3x over 21 days, briefing shows, undo reverts', async ({ page }) => {
     // const { campaignId } = await seedCampaign(page, {

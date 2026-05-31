@@ -48,4 +48,35 @@ describe('computeLayout', () => {
     }
     expect(a).toEqual(b); // seeded, not random
   });
+
+  it('lays out 100 nodes with ~2x edges in under 2s and positions every node', () => {
+    const N = 100;
+    const clusterCount = 5;
+    const big = Array.from({ length: N }, (_, i) => ({
+      id: `n:${i}`,
+      cluster: `c:${i % clusterCount}`,
+    }));
+    // ~2x edges: a sparse ring plus extra random-ish (deterministic) cross links.
+    const bigEdges: { source: string; target: string; weight: number }[] = [];
+    for (let i = 0; i < N; i++) {
+      bigEdges.push({ source: `n:${i}`, target: `n:${(i + 1) % N}`, weight: 0.5 });
+    }
+    for (let i = 0; i < N; i++) {
+      bigEdges.push({
+        source: `n:${i}`,
+        target: `n:${(i * 7 + 3) % N}`,
+        weight: 0.3,
+      });
+    }
+    const start = Date.now();
+    const out = computeLayout(big, bigEdges);
+    const elapsed = Date.now() - start;
+    expect(elapsed).toBeLessThan(2000);
+    for (const nd of big) {
+      const p = out[nd.id];
+      expect(p).toBeTruthy();
+      expect(Number.isFinite(p.x)).toBe(true);
+      expect(Number.isFinite(p.y)).toBe(true);
+    }
+  });
 });

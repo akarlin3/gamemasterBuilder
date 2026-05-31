@@ -43,6 +43,7 @@ export default function WikiGraph({
   savedPositions,
   onPositionsChange,
   onConnectNodes,
+  onEdgeDelete,
 }: {
   entities: WikiEntity[];
   relationships: Relationship[];
@@ -54,6 +55,8 @@ export default function WikiGraph({
   savedPositions?: Record<string, { x: number; y: number }>;
   onPositionsChange?: (positions: Record<string, { x: number; y: number }>) => void;
   onConnectNodes?: (sourceKey: string, targetKey: string) => void;
+  /** GM-only: edge deleted from the canvas (e.g. Delete key on a selected edge). */
+  onEdgeDelete?: (relationshipId: string) => void;
 }) {
   const nodes = useMemo<GraphNode[]>(
     () =>
@@ -117,6 +120,7 @@ export default function WikiGraph({
       savedPositions={savedPositions}
       onPositionsChange={onPositionsChange}
       onConnectNodes={onConnectNodes}
+      onEdgeDelete={interactive ? onEdgeDelete : undefined}
       onNodeClick={(n) => {
         const ent = byKey.get(n.key);
         if (ent) onNodeClick(ent);
