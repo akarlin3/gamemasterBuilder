@@ -25,7 +25,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",
     "@ducanh2912/next-pwa": "^10.2.9",
-    "@xyflow/react": "^12.10.2",
+    "@xyflow/react": "^12.11.0",
     "d3-force": "^3.0.0",
     "firebase": "^11.10.0",
     "firebase-admin": "^13.10.0",
